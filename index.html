@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="fa"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<meta content="#1e293b" name="theme-color"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="icon" href="icon-192.png"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<title>حسابرسی کارتن و موجودی تخم‌مرغ</title>
+<style>
+        * { box-sizing: border-box; font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background: #f8fafc; color: #1e293b; padding-bottom: 50px; }
+        header { background: #1e293b; color: #fff; padding: 12px 16px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(15,23,42,0.18); }
+        .header-top { display: flex; justify-content: space-between; align-items: center; max-width: 860px; margin: 0 auto; flex-wrap: wrap; gap: 10px; }
+        .header-title { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; }
+        .brand-icon { width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; }
+        
+        /* Offline status badge */
+        .offline-status-bar { max-width: 860px; margin: 8px auto 0; display: flex; align-items: center; justify-content: space-between; background: rgba(15,23,42,0.65); border: 1px solid rgba(255,255,255,0.12); padding: 5px 12px; border-radius: 9999px; font-size: 11px; color: #cbd5e1; }
+        .offline-pill { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: #4ade80; }
+        .offline-pill .pulse-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 0 0 rgba(34,197,94,0.7); animation: pulseGreen 2s infinite; }
+        @keyframes pulseGreen {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        .btn { border: none; border-radius: 10px; padding: 9px 13px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: #2563eb; color: #fff; box-shadow: 0 2px 8px rgba(37,99,235,0.25); }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-success { background: #16a34a; color: #fff; }
+        .btn-danger { background: #dc2626; color: #fff; }
+        .btn-warning { background: #ea580c; color: #fff; }
+        .btn-rubika { background: #7c3aed; color: #fff; }
+        .btn-print { background: #0f172a; color: #fff; box-shadow: 0 2px 6px rgba(15,23,42,0.2); }
+        .btn-print:hover { background: #1e293b; }
+        .btn-outline { background: rgba(255,255,255,0.12); color: #f8fafc; font-size: 12px; padding: 8px 12px; border: 1px solid rgba(255,255,255,0.15); }
+        .btn-toggle-active { background: #fef08a !important; color: #854d0e !important; border-color: #fde047 !important; font-weight: 700; }
+        .container { max-width: 720px; margin: 0 auto; padding: 14px 12px; }
+        
+        .slider-bar { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 8px 12px; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 12px; border: 1px solid #e2e8f0; }
+        .tabs-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 12px; scrollbar-width: none; }
+        .tabs-scroll::-webkit-scrollbar { display: none; }
+        .tab-chip { padding: 8px 16px; background: #fff; color: #475569; border: 1px solid #e2e8f0; border-radius: 9999px; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: 0.15s; }
+        .tab-chip.active { background: #2563eb; color: #fff; border-color: #2563eb; box-shadow: 0 3px 10px rgba(37,99,235,0.3); }
+
+        /* Inventory Box Styles */
+        .inventory-card { background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 2px 8px rgba(15,23,42,0.05); margin-bottom: 14px; border: 1px solid #e2e8f0; }
+        .inventory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9; }
+        .inv-weights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+        .weight-badge { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 10px; text-align: center; position: relative; transition: all 0.2s; }
+        .weight-badge:hover { border-color: #cbd5e1; }
+        .weight-badge.w-light { border-top: 4px solid #38bdf8; }
+        .weight-badge.w-mid { border-top: 4px solid #f59e0b; }
+        .weight-badge.w-heavy { border-top: 4px solid #10b981; }
+        
+        /* Stock level badge tags */
+        .stock-level-tag { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 9.5px; font-weight: 800; padding: 2px 8px; border-radius: 20px; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .stock-level-tag.tag-out { background: #ef4444; color: #fff; }
+        .stock-level-tag.tag-low { background: #f59e0b; color: #fff; }
+        .stock-badge-out { border: 1.5px solid #fca5a5 !important; background: #fff5f5 !important; }
+        .stock-badge-low { border: 1.5px solid #fde68a !important; background: #fffbeb !important; }
+
+        .weight-title { font-size: 12px; font-weight: 800; color: #334155; margin-bottom: 2px; }
+        .weight-sub { font-size: 10px; color: #64748b; margin-bottom: 6px; }
+        .weight-count { font-size: 19px; font-weight: 900; color: #0f172a; }
+        .weight-unit { font-size: 11px; font-weight: normal; color: #64748b; margin-right: 3px; }
+        .cost-hidden-pill { background: #f1f5f9; color: #94a3b8; font-size: 10.5px; border-radius: 6px; padding: 2px 6px; display: inline-block; margin-top: 5px; }
+        .cost-revealed-pill { background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 700; border-radius: 6px; padding: 3px 6px; display: flex; flex-direction: column; gap: 2px; margin-top: 6px; text-align: right; }
+        .cost-revealed-row { display: flex; justify-content: space-between; align-items: center; }
+
+        .customer-card { background: #fff; border-radius: 18px; padding: 18px; box-shadow: 0 2px 8px rgba(15,23,42,0.05); margin-bottom: 14px; border-top: 5px solid #2563eb; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #e2e8f0; border-left: 1px solid #f1f5f9; }
+        .cust-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .cust-name { font-size: 19px; font-weight: 800; color: #0f172a; }
+        .cust-phone { display: inline-flex; align-items: center; gap: 4px; background: #eff6ff; color: #1d4ed8; padding: 5px 12px; border-radius: 8px; font-size: 13px; text-decoration: none; font-weight: 700; margin-top: 5px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8fafc; padding: 12px; border-radius: 12px; font-size: 12px; margin-bottom: 14px; border: 1px solid #e2e8f0; }
+        .info-item b { display: block; color: #64748b; margin-bottom: 3px; font-size: 11px; }
+        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+        .sum-box { padding: 11px 6px; border-radius: 12px; font-size: 11px; position: relative; }
+        .sum-box strong { display: block; font-size: 15px; margin-top: 4px; font-weight: 800; }
+        .sum-carton { background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; }
+        .sum-cash { background: #ecfdf5; color: #15803d; border: 1px solid #86efac; }
+        .sum-credit { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+        
+        /* Edit debt trigger button */
+        .btn-edit-debt { margin-top: 6px; background: #fff; border: 1px solid #f87171; color: #b91c1c; border-radius: 8px; padding: 3px 8px; font-size: 10.5px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.15s; }
+        .btn-edit-debt:hover { background: #fee2e2; border-color: #ef4444; }
+
+        .form-card { background: #fff; border-radius: 18px; padding: 16px; box-shadow: 0 2px 8px rgba(15,23,42,0.05); margin-bottom: 14px; border: 1px solid #e2e8f0; }
+        .form-title { font-size: 14.5px; font-weight: 800; margin-bottom: 12px; color: #0f172a; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-size: 11.5px; color: #475569; margin-bottom: 5px; font-weight: 700; }
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 13.5px; background: #f8fafc; transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s; }
+        .form-control:focus { outline: none; border-color: #2563eb; background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+        .form-control.input-error { border-color: #ef4444 !important; background: #fef2f2 !important; box-shadow: 0 0 0 3px rgba(239,68,68,0.15) !important; color: #b91c1c !important; }
+        
+        /* Live stock warning banners */
+        .stock-shortage-alert { background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 12px; padding: 10px 12px; margin-top: 6px; margin-bottom: 6px; display: flex; align-items: flex-start; gap: 9px; animation: alertFadeIn 0.25s ease-out; }
+        .stock-zero-alert { background: #fee2e2; border: 1.5px solid #fca5a5; border-radius: 12px; padding: 10px 12px; margin-top: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; animation: alertFadeIn 0.25s ease-out; }
+        @keyframes alertFadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sig-container { border: 2px dashed #cbd5e1; border-radius: 12px; background: #fff; position: relative; margin-bottom: 10px; overflow: hidden; }
+        canvas { display: block; width: 100%; height: 110px; touch-action: none; background: #fafafa; }
+        .sig-actions { display: flex; justify-content: space-between; padding: 6px 12px; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 11.5px; color: #64748b; align-items: center; }
+        
+        .tx-item { padding: 14px; border-radius: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+        .tx-cash { background: #f0fdf4; border-right: 6px solid #16a34a; border-top: 1px solid #bbf7d0; border-bottom: 1px solid #bbf7d0; border-left: 1px solid #bbf7d0; }
+        .tx-credit { background: #fff5f5; border-right: 6px solid #dc2626; border-top: 1px solid #fecaca; border-bottom: 1px solid #fecaca; border-left: 1px solid #fecaca; }
+        .tx-adjustment { background: #fefce8; border-right: 6px solid #eab308; border-top: 1px solid #fef08a; border-bottom: 1px solid #fef08a; border-left: 1px solid #fef08a; }
+        .badge-cash { background: #16a34a; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; }
+        .badge-credit { background: #dc2626; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; }
+        .badge-adjustment { background: #ca8a04; color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; }
+        .badge-weight { background: #e0e7ff; color: #3730a3; padding: 3px 7px; border-radius: 6px; font-size: 11px; font-weight: 700; display: inline-block; }
+        .tx-meta { font-size: 12px; color: #64748b; margin-top: 4px; font-weight: 600; }
+        .tx-price { font-size: 13.5px; font-weight: 700; margin-top: 3px; }
+        .tx-actions { display: flex; flex-direction: column; gap: 6px; min-width: 110px; }
+        
+        .modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.65); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; padding: 14px; }
+        .modal.show { display: flex; }
+        .modal-content { background: #fff; width: 100%; max-width: 520px; border-radius: 20px; padding: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); max-height: 92vh; overflow-y: auto; }
+        .empty-state { text-align: center; padding: 48px 20px; background: #fff; border-radius: 18px; color: #64748b; border: 1px dashed #cbd5e1; }
+
+        /* Batches history table in modal */
+        .batches-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px; }
+        .batches-table th { background: #f1f5f9; padding: 6px 8px; border: 1px solid #e2e8f0; font-weight: 700; color: #475569; text-align: center; }
+        .batches-table td { padding: 6px 8px; border: 1px solid #e2e8f0; text-align: center; }
+
+        /* Invoice Modal Specifics */
+        #invoiceModal .modal-content { max-width: 720px; max-height: 94vh; overflow-y: auto; padding: 0; background: #f1f5f9; border-radius: 16px; }
+        .invoice-sheet { background: #fff; margin: 16px; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0; position: relative; color: #1e293b; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+        .inv-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0f172a; padding-bottom: 14px; margin-bottom: 14px; }
+        .inv-brand { font-size: 18px; font-weight: 900; color: #0f172a; }
+        .inv-sub { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+        .inv-badge-num { font-size: 12px; font-weight: 700; background: #f1f5f9; padding: 4px 10px; border-radius: 8px; border: 1px solid #cbd5e1; }
+        .inv-customer-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 12.5px; }
+        .inv-table th { background: #f1f5f9; color: #334155; font-weight: 700; padding: 9px 8px; border: 1px solid #cbd5e1; text-align: center; }
+        .inv-table td { padding: 9px 8px; border: 1px solid #cbd5e1; text-align: center; }
+        .inv-stamp { position: absolute; left: 32px; top: 110px; border: 3px solid; border-radius: 10px; padding: 6px 14px; font-size: 15px; font-weight: 900; transform: rotate(-12deg); opacity: 0.85; pointer-events: none; letter-spacing: 1px; }
+        .stamp-settled { color: #16a34a; border-color: #16a34a; background: rgba(22,163,74,0.06); }
+        .stamp-debt { color: #dc2626; border-color: #dc2626; background: rgba(220,38,38,0.06); }
+        .inv-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; padding-top: 14px; border-top: 1px dashed #cbd5e1; }
+        .inv-sig-box { border: 1px dashed #cbd5e1; border-radius: 10px; height: 105px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 8px; background: #fafafa; }
+        .inv-sig-box span { font-size: 11.5px; color: #475569; font-weight: 700; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #invoiceModal, #invoiceModal * { visibility: visible; }
+            #invoiceModal { position: absolute; left: 0; top: 0; width: 100%; background: #fff !important; padding: 0 !important; margin: 0 !important; display: block !important; }
+            #invoiceModal .modal-content { max-width: 100% !important; border-radius: 0 !important; box-shadow: none !important; margin: 0 !important; background: #fff !important; }
+            .invoice-sheet { border: 1px solid #000 !important; box-shadow: none !important; margin: 0 !important; padding: 20px !important; }
+            .inv-modal-actions { display: none !important; }
+            @page { size: A5 landscape; margin: 8mm; }
+        }
+    </style>
+</head>
+<body>
+<header>
+<div class="header-top">
+<div class="header-title">
+<div class="brand-icon">
+<svg fill="none" height="20" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="20"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<span>حسابرسی کارتن و موجودی تخم‌مرغ</span>
+</div>
+<div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+<!-- Privacy Toggle: Manager Price & Profit Visibility -->
+<button class="btn btn-outline" id="managerToggleBtn" onclick="toggleManagerPrivacy()" title="نمایش/مخفی‌سازی قیمت خرید، نرخ محموله‌ها و سود">
+<svg fill="none" height="15" id="eyeIcon" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15">
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span id="managerToggleText">دید مدیر (قیمت خرید)</span>
+</button>
+<button class="btn btn-outline" onclick="openStockModal()" style="background:#0284c7; border-color:#38bdf8;" title="انبارگردانی و ورود بار جدید">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7M4 7c0-2 1.5-3 3.5-3h9c2 0 3.5 1 3.5 3M4 7h16m-8 4v6m-3-3h6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>انبارگردانی</span>
+</button>
+<button class="btn btn-outline" onclick="exportData()" title="پشتیبان‌گیری داده‌ها">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>پشتیبان</span>
+</button>
+<button class="btn btn-primary" onclick="openCustomerModal()">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="15"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>مشتری جدید</span>
+</button>
+</div>
+</div>
+<!-- Offline Status Bar -->
+<div class="offline-status-bar">
+<div class="offline-pill">
+<span class="pulse-dot"></span>
+<span>ذخیره‌سازی آفلاین و خودکار فعال است (داده‌ها امن در حافظه دستگاه)</span>
+</div>
+<div id="storageSyncText" style="font-size:10.5px; opacity:0.85;">
+        💾 همگام‌سازی لحظه‌ای بدون نیاز به اینترنت
+    </div>
+</div>
+</header>
+<div class="container">
+<!-- Egg Inventory Section -->
+<div class="inventory-card" id="inventoryCard">
+<div class="inventory-header">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="font-size:20px;">🥚</span>
+<div>
+<div style="font-size:14.5px; font-weight:800; color:#0f172a;">موجودی انبار کارتن تخم‌مرغ</div>
+<div style="font-size:11.5px; color:#64748b;">تفکیک موجودی و میانگین قیمت خرید محموله‌ها در ۳ رده وزنی</div>
+</div>
+</div>
+<div style="display:flex; gap:6px;">
+<button class="btn btn-outline" onclick="openStockModal()" style="font-size:12px; padding:6px 11px; background:#eff6ff; color:#2563eb; border-color:#bfdbfe;">
+                ⚙️ تنظیم / ورود بار جدید
+            </button>
+</div>
+</div>
+<!-- 3 Distinct Egg Weight Categories with Stock Level Indicators -->
+<div class="inv-weights-grid" id="invCardsContainer">
+<!-- populated by render -->
+</div>
+<!-- Confidential Manager Overview (Only if toggled) -->
+<div id="managerSummaryBox" style="display:none; background:#fefce8; border:1px dashed #facc15; border-radius:12px; padding:10px 14px; margin-top:8px;">
+<div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#854d0e;">
+<span style="font-weight:800;">🔒 ارزش ریالی انبار بر مبنای قیمت خرید محموله‌ها:</span>
+<span id="managerTotalStockValue" style="font-weight:900; font-size:14px; color:#713f12;">۰ تومان</span>
+</div>
+<div style="font-size:11px; color:#a16207; margin-top:4px;">
+            قیمت‌های خرید و حاشیه سود به صورت محرمانه فقط برای مدیر قابل رویت است.
+        </div>
+</div>
+</div>
+<div class="tabs-scroll" id="tabsContainer"></div>
+<div class="slider-bar" id="sliderNav" style="display:none;">
+<button class="btn btn-outline" onclick="changeSlide(-1)" style="background:#f1f5f9;color:#1e293b;border-color:#cbd5e1;">◀ قبلی</button>
+<span id="slideCounter" style="font-size:13px; font-weight:800; color:#0f172a;"></span>
+<button class="btn btn-outline" onclick="changeSlide(1)" style="background:#f1f5f9;color:#1e293b;border-color:#cbd5e1;">بعدی ▶</button>
+</div>
+<div id="mainContent"></div>
+</div>
+<!-- Modal: Edit Customer Manual Debt (ویرایش دستی مانده بدهی مشتری) -->
+<div class="modal" id="editDebtModal">
+<div class="modal-content" style="max-width:480px; border-top:5px solid #dc2626;">
+<div class="form-title">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="width:32px; height:32px; border-radius:8px; background:#fee2e2; color:#dc2626; display:flex; align-items:center; justify-content:center; font-size:16px;">
+✏️
+</span>
+<span>تنظیم و تعدیل دستی مانده بدهی مشتری</span>
+</div>
+<button onclick="closeEditDebtModal()" style="background:none; border:none; color:#64748b; cursor:pointer; font-size:18px; padding:4px;">✕</button>
+</div>
+<div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:10px; margin-bottom:14px; font-size:12px; color:#991b1b; line-height:1.6;">
+<strong>مشتری جاری:</strong> <span id="debtModalCustomerName" style="font-weight:800;">-</span><br/>
+    مانده بدهی فعلی بر اساس محاسبات سیستم: <strong id="debtModalCurrentVal" style="font-size:13.5px; color:#dc2626;">۰ تومان</strong>
+</div>
+<div class="form-group">
+<label>نوع عملیات تعدیل بدهی *</label>
+<select class="form-control" id="debtOpType" onchange="onDebtOpTypeChange()">
+<option value="set">📝 تنظیم مستقیم مانده بدهی جدید (جایگزینی قطعی)</option>
+<option value="discount">🎁 کسر تخفیف یا بخشش از بدهی فعلی</option>
+<option value="settle">🟢 تسویه حساب توافقی (صفر کردن مانده بدهی)</option>
+<option value="legacy">📦 انتقال مانده حساب قدیمی / بدهی متفرقه قبلی</option>
+</select>
+</div>
+<div class="form-group" id="debtAmountGroup">
+<label id="debtAmountLabel">مبلغ مانده بدهی جدید (تومان) *</label>
+<input class="form-control" id="debtNewAmount" oninput="formatLiveCurrency(this); previewDebtDiff();" placeholder="مثلاً: ۲,۵۰۰,۰۰۰" type="text"/>
+<div id="debtPreviewHint" style="font-size:11.5px; color:#64748b; margin-top:4px; font-weight:600;"></div>
+</div>
+<div class="form-group">
+<label>تاریخ ثبت سند تعدیل</label>
+<input class="form-control" id="debtAdjustDate" type="text"/>
+</div>
+<div class="form-group">
+<label>علت یا توضیحات سند دستی (اختیاری اما پیشنهادی)</label>
+<input class="form-control" id="debtAdjustNote" placeholder="مثال: تسویه نقدی با تخفیف ۵۰۰ هزار تومان توافق شد" type="text"/>
+</div>
+<div style="display:flex; gap:10px; margin-top:16px;">
+<button class="btn btn-primary" onclick="saveManualDebtAdjustment()" style="flex:2; padding:11px; background:#dc2626;">
+<svg fill="none" height="17" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="17"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    اعمال و ذخیره مانده بدهی
+</button>
+<button class="btn btn-outline" onclick="closeEditDebtModal()" style="flex:1; background:#f1f5f9; color:#475569; border-color:#cbd5e1;">انصراف</button>
+</div>
+</div>
+</div>
+<!-- Modal: Stock Shortage Warning / Confirmation (اخطار کسری و اتمام موجودی) -->
+<div class="modal" id="shortageModal">
+<div class="modal-content" style="max-width:460px; border-top:6px solid #dc2626;">
+<div style="text-align:center; padding:10px 0 16px;">
+<div style="width:58px; height:58px; border-radius:50%; background:#fee2e2; color:#dc2626; display:inline-flex; align-items:center; justify-content:center; font-size:30px; margin-bottom:12px; box-shadow:0 4px 12px rgba(220,38,38,0.2);">
+⚠️
+</div>
+<h3 style="font-size:17px; font-weight:900; color:#991b1b; margin-bottom:6px;">هشدار کسری موجودی انبار!</h3>
+<p id="shortageModalText" style="font-size:13px; color:#475569; line-height:1.6; margin-bottom:16px;">
+تعداد کارتن درخواستی از موجودی انبار برای این رده وزنی بیشتر است.
+</p>
+<div id="shortageModalDetails" style="background:#fff1f2; border:1px solid #fecdd3; border-radius:12px; padding:12px; margin-bottom:18px; text-align:right; font-size:12.5px;">
+<!-- Dynamic stock details -->
+</div>
+<div style="display:flex; flex-direction:column; gap:8px;">
+<button class="btn btn-primary" onclick="proceedToStockFromShortage()" style="background:#0284c7; padding:11px; font-size:13.5px;">
+<svg fill="none" height="17" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="17"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+ورود بار جدید به انبار (افزایش موجودی)
+</button>
+<button class="btn btn-warning" onclick="confirmForceSubmitRecord()" style="background:#ea580c; padding:10px; font-size:13px;">
+ثبت به صورت پیش‌فروش / کسری انبار (موجودی منفی)
+</button>
+<button class="btn btn-outline" onclick="closeShortageModal()" style="background:#f1f5f9; color:#475569; border-color:#cbd5e1; padding:9px;">
+انصراف و اصلاح تعداد کارتن
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal: Stocktaking / Add Inventory Batch (ورود بار جدید و انبارگردانی) -->
+<div class="modal" id="stockModal">
+<div class="modal-content">
+<div class="form-title">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="width:30px; height:30px; border-radius:8px; background:#eff6ff; color:#0284c7; display:flex; align-items:center; justify-content:center;">
+📦
+</span>
+<span>ورود محموله جدید و انبارگردانی تخم‌مرغ</span>
+</div>
+<button onclick="closeStockModal()" style="background:none; border:none; color:#64748b; cursor:pointer; font-size:18px; padding:4px;">✕</button>
+</div>
+<div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:10px; margin-bottom:14px; font-size:12px; color:#166534;">
+    ثبت هر محموله ورودی جدید با نرخ خرید مجزا جهت محاسبه هوشمند میانگین قیمت تمام‌شده و سود خالص.
+</div>
+<div class="input-row">
+<div>
+<label>نوع عملیات *</label>
+<select class="form-control" id="stockOpType" onchange="toggleOpTypeView()">
+<option selected="" value="add">➕ ورود محموله جدید (افزایش)</option>
+<option value="set">📝 اصلاح شمارش فیزیکی (تنظیم موجودی)</option>
+</select>
+</div>
+<div>
+<label>رده وزنی تخم‌مرغ *</label>
+<select class="form-control" id="stockWeightKey" onchange="updateStockModalDefaults()">
+<option value="light">سبک (۱۰ الی ۱۱ کیلوگرم)</option>
+<option selected="" value="medium">استاندارد (۱۱.۵ الی ۱۲.۵ کیلوگرم)</option>
+<option value="heavy">سنگین (۱۳ کیلوگرم به بالا)</option>
+</select>
+</div>
+</div>
+<div class="input-row">
+<div>
+<label>تعداد کارتن *</label>
+<input class="form-control" id="stockQty" min="0" placeholder="مثلاً ۱۰۰" type="number"/>
+</div>
+<div>
+<label>قیمت خرید این محموله (تومان هر کارتن) *</label>
+<input class="form-control" id="stockBuyPrice" placeholder="مثلاً ۵۸۰۰۰۰" type="number"/>
+</div>
+</div>
+<div class="input-row">
+<div>
+<label>تاریخ ورود محموله *</label>
+<input class="form-control" id="stockDate" placeholder="۱۴۰۳/۰۸/۱۶" type="text"/>
+</div>
+<div>
+<label>قیمت پیشنهادی فروش (تومان)</label>
+<input class="form-control" id="stockSellPrice" placeholder="مثلاً ۶۵۰۰۰۰" type="number"/>
+</div>
+</div>
+<div class="form-group">
+<label>نام تأمین‌کننده / مرغداری و شماره حواله</label>
+<input class="form-control" id="stockNotes" placeholder="مثال: مرغداری سپیدان، حواله ۴۵۸، بار درجه یک" type="text"/>
+</div>
+<div style="display:flex; gap:10px; margin-top:14px;">
+<button class="btn btn-primary" onclick="saveStockAdjustment()" style="flex:2; padding:11px;">
+<svg fill="none" height="17" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="17"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        ثبت محموله و بروزرسانی انبار
+</button>
+<button class="btn btn-outline" onclick="closeStockModal()" style="flex:1; background:#f1f5f9; color:#475569; border-color:#cbd5e1;">انصراف</button>
+</div>
+<!-- Batches History Section -->
+<div style="margin-top:18px; border-top:1px solid #e2e8f0; padding-top:12px;">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+<span style="font-size:12.5px; font-weight:800; color:#1e293b;">📜 سوابق محموله‌های ورودی اخیر</span>
+<span id="modalSelectedWeightName" style="font-size:11px; font-weight:700; color:#2563eb;"></span>
+</div>
+<div id="batchesTableContainer" style="max-height:160px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:8px;">
+<!-- Rendered via JS -->
+</div>
+</div>
+</div>
+</div>
+<!-- Modal: New Customer -->
+<div class="modal" id="customerModal">
+<div class="modal-content">
+<div class="form-title">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="width:30px; height:30px; border-radius:8px; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center;">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</span>
+<span>تعریف مشتری جدید</span>
+</div>
+<button onclick="closeCustomerModal()" style="background:none; border:none; color:#64748b; cursor:pointer; font-size:18px; padding:4px;">✕</button>
+</div>
+<div class="form-group">
+<label>نام و نام خانوادگی / نام فروشگاه *</label>
+<input class="form-control" id="cName" placeholder="مثال: سوپرمارکت امید یا فروشگاه حسینی" type="text"/>
+</div>
+<div class="form-group">
+<label>شماره تماس مستقیم *</label>
+<input class="form-control" id="cPhone" placeholder="مثال: 09123456789" type="tel"/>
+</div>
+<div class="form-group">
+<label>آدرس مغازه / فروشگاه</label>
+<input class="form-control" id="cShopAddr" placeholder="مثال: بازار بزرگ، سرای امید، پلاک ۱۲" type="text"/>
+</div>
+<div class="form-group">
+<label>محل و ساعت تحویل بار</label>
+<input class="form-control" id="cDelivAddr" placeholder="مثال: انبار مرکزی یا تحویل ساعت ۹ صبح درب مغازه" type="text"/>
+</div>
+<div style="display:flex; gap:10px; margin-top:20px;">
+<button class="btn btn-primary" onclick="saveCustomer()" style="flex:2; padding:11px;">
+<svg fill="none" height="17" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="17"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        ذخیره و ثبت مشتری
+    </button>
+<button class="btn btn-outline" onclick="closeCustomerModal()" style="flex:1; background:#f1f5f9; color:#475569; border-color:#cbd5e1;">انصراف</button>
+</div>
+</div>
+</div>
+<!-- Modal: Invoice Print / PDF Preview -->
+<div class="modal" id="invoiceModal">
+<div class="modal-content">
+<div class="inv-modal-actions" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px; background:#1e293b; color:#fff; border-top-left-radius:16px; border-top-right-radius:16px;">
+<div style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px;">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>پیش‌نمایش فاکتور رسمی / چاپ</span>
+</div>
+<div style="display:flex; gap:8px;">
+<button class="btn btn-primary" onclick="window.print()" style="padding:6px 14px; font-size:12px;">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zM9 9h6m-6 4h6m-6-8h6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span>چاپ فاکتور (PDF)</span>
+</button>
+<button class="btn btn-outline" onclick="closeInvoiceModal()" style="background:rgba(255,255,255,0.18); font-size:12px; padding:6px 12px;">بستن</button>
+</div>
+</div>
+<div id="invoiceSheetContainer"></div>
+</div>
+</div>
+<script>
+    // 3 Distinct Weight Categories for Eggs with Batches (Lots) History
+    const defaultEggInventory = {
+        light: {
+            name: "سبک (۱۰ - ۱۱ کیلوگرم)",
+            shortLabel: "۱۰ تا ۱۱ کیلو",
+            count: 140,
+            buyPrice: 520000,
+            sellPrice: 580000,
+            batches: [
+                { id: 101, date: '۱۴۰۳/۰۸/۰۱', qty: 100, buyPrice: 510000, supplier: 'مرغداری لاله' },
+                { id: 102, date: '۱۴۰۳/۰۸/۱۰', qty: 140, buyPrice: 520000, supplier: 'مرغداری نگین' }
+            ]
+        },
+        medium: {
+            name: "استاندارد (۱۱.۵ - ۱۲.۵ کیلوگرم)",
+            shortLabel: "۱۱.۵ تا ۱۲.۵ کیلو",
+            count: 320,
+            buyPrice: 570000,
+            sellPrice: 640000,
+            batches: [
+                { id: 201, date: '۱۴۰۳/۰۸/۰۲', qty: 200, buyPrice: 560000, supplier: 'مرغداری بهاران' },
+                { id: 202, date: '۱۴۰۳/۰۸/۱۲', qty: 220, buyPrice: 570000, supplier: 'مرغداری سپید' }
+            ]
+        },
+        heavy: {
+            name: "سنگین (۱۳ کیلوگرم به بالا)",
+            shortLabel: "۱۳ کیلوگرم به بالا",
+            count: 95,
+            buyPrice: 620000,
+            sellPrice: 700000,
+            batches: [
+                { id: 301, date: '۱۴۰۳/۰۸/۰۵', qty: 95, buyPrice: 620000, supplier: 'کشتارگاه و فارم البرز' }
+            ]
+        }
+    };
+
+    // Robust offline-first storage keys
+    const STORAGE_KEY_INVENTORY = 'hesab_egg_inventory_v2';
+    const STORAGE_KEY_CUSTOMERS = 'hesab_customers_v8';
+    const STORAGE_KEY_PRIVACY = 'hesab_show_manager_prices';
+
+    let storedInventory = localStorage.getItem(STORAGE_KEY_INVENTORY);
+    let inventory = storedInventory ? JSON.parse(storedInventory) : defaultEggInventory;
+
+    // Migrate if batches missing
+    Object.keys(inventory).forEach(k => {
+        if (!inventory[k].batches || !Array.isArray(inventory[k].batches)) {
+            inventory[k].batches = [
+                { id: Date.now() + Math.random(), date: '۱۴۰۳/۰۸/۱۰', qty: inventory[k].count || 50, buyPrice: inventory[k].buyPrice || 550000, supplier: 'ثبت اولیه انبار' }
+            ];
+        }
+    });
+
+    // Manager Privacy State (Default: confidential/hidden)
+    let showManagerPrices = localStorage.getItem(STORAGE_KEY_PRIVACY) === 'true';
+
+    // Initial sample customers
+    const defaultSampleCustomers = [
+        {
+            id: 1710000001,
+            name: "هایپرمارکت امید (آقای عباسی)",
+            phone: "09121112233",
+            shopAddr: "تهران، خیابان شریعتی، نبش بهار، پلاک ۲۸",
+            delivAddr: "انبار مرکزی - تحویل قبل از ساعت ۱۰ صبح",
+            manualDebtAdjustment: 0,
+            records: [
+                {
+                    id: 1710000101,
+                    cartons: 450,
+                    weightCategory: 'medium',
+                    buyPrice: 570000,
+                    sellPrice: 640000,
+                    total: 15750000,
+                    paid: 15750000,
+                    remaining: 0,
+                    status: 'cash',
+                    date: '۱۴۰۳/۰۸/۱۲',
+                    note: 'تحویل بار کارتن تخم‌مرغ استاندارد ۱۲ کیلویی - بار روز صادراتی',
+                    signature: ''
+                },
+                {
+                    id: 1710000102,
+                    cartons: 200,
+                    weightCategory: 'light',
+                    buyPrice: 520000,
+                    sellPrice: 580000,
+                    total: 7200000,
+                    paid: 4000000,
+                    remaining: 3200000,
+                    status: 'credit',
+                    date: '۱۴۰۳/۰۸/۱۵',
+                    note: 'باقیمانده حساب پس از فروش پایان ماه واریز می‌گردد',
+                    signature: ''
+                }
+            ]
+        },
+        {
+            id: 1710000002,
+            name: "فروشگاه پخش برادران حسینی",
+            phone: "09358889900",
+            shopAddr: "میدان بهارستان، کوچه نظامی، پلاک ۱۴",
+            delivAddr: "تحویل درب مغازه - امضای انباردار ضروری است",
+            manualDebtAdjustment: 0,
+            records: [
+                {
+                    id: 1710000201,
+                    cartons: 600,
+                    weightCategory: 'heavy',
+                    buyPrice: 620000,
+                    sellPrice: 700000,
+                    total: 23100000,
+                    paid: 23100000,
+                    remaining: 0,
+                    status: 'cash',
+                    date: '۱۴۰۳/۰۸/۱۴',
+                    note: 'تسویه کامل از طریق حواله پایا',
+                    signature: ''
+                }
+            ]
+        }
+    ];
+
+    let storedRaw = localStorage.getItem(STORAGE_KEY_CUSTOMERS);
+    if (!storedRaw) {
+        // Check backwards compatibility with v7
+        const prevV7 = localStorage.getItem('hesab_customers_v7');
+        if (prevV7) {
+            try {
+                storedRaw = prevV7;
+            } catch(e){}
+        }
+    }
+    let customers = storedRaw ? JSON.parse(storedRaw) : defaultSampleCustomers;
+    if (!storedRaw) {
+        localStorage.setItem(STORAGE_KEY_CUSTOMERS, JSON.stringify(customers));
+    }
+
+    let currentIndex = 0;
+    let canvas, ctx, isDrawing = false;
+    let pendingShortageRecord = null;
+    let isManualRemainingOverridden = false;
+
+    function saveToStorage() {
+        try {
+            localStorage.setItem(STORAGE_KEY_CUSTOMERS, JSON.stringify(customers));
+            localStorage.setItem(STORAGE_KEY_INVENTORY, JSON.stringify(inventory));
+            localStorage.setItem(STORAGE_KEY_PRIVACY, showManagerPrices);
+            const syncEl = document.getElementById('storageSyncText');
+            if (syncEl) {
+                syncEl.innerText = `💾 ذخیره خودکار در ${new Date().toLocaleTimeString('fa-IR')}`;
+            }
+        } catch(e) {
+            console.error('LocalStorage write error', e);
+        }
+    }
+    
+    function toggleManagerPrivacy() {
+        showManagerPrices = !showManagerPrices;
+        saveToStorage();
+        updateManagerPrivacyUI();
+        render();
+    }
+
+    function updateManagerPrivacyUI() {
+        const btn = document.getElementById('managerToggleBtn');
+        const text = document.getElementById('managerToggleText');
+        const eyeIcon = document.getElementById('eyeIcon');
+        if (showManagerPrices) {
+            btn.classList.add('btn-toggle-active');
+            text.innerText = 'دید مدیر (روشن)';
+            eyeIcon.innerHTML = `<path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" stroke-linecap="round" stroke-linejoin="round"></path>`;
+        } else {
+            btn.classList.remove('btn-toggle-active');
+            text.innerText = 'دید مدیر (قیمت خرید)';
+            eyeIcon.innerHTML = `<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round"></path>`;
+        }
+    }
+
+    function getTodayLocal() {
+        try {
+            return new Intl.DateTimeFormat('fa-IR').format(new Date());
+        } catch (e) {
+            return new Date().toLocaleDateString();
+        }
+    }
+
+    function formatNum(num) {
+        return Number(Math.round(num) || 0).toLocaleString('fa-IR');
+    }
+
+    function parseNumericString(val) {
+        if (!val) return 0;
+        // Convert Persian/Arabic digits to English
+        const pMap = {'۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'};
+        let cleaned = String(val).replace(/[۰-۹]/g, d => pMap[d]).replace(/[^\d.-]/g, '');
+        return parseFloat(cleaned) || 0;
+    }
+
+    function formatLiveCurrency(input) {
+        const num = parseNumericString(input.value);
+        if (num === 0 && input.value.trim() === '') {
+            input.value = '';
+            return;
+        }
+        input.value = num.toLocaleString('fa-IR');
+    }
+
+    // Helper: calculate customer total debt
+    function getCustomerDebtBreakdown(customer) {
+        if (!customer) return { recordsDebt: 0, manualDebtAdjustment: 0, totalDebt: 0 };
+        let recordsDebt = 0;
+        (customer.records || []).forEach(r => {
+            recordsDebt += Number(r.remaining || 0);
+        });
+        const manualAdj = Number(customer.manualDebtAdjustment || 0);
+        const totalDebt = Math.max(0, recordsDebt + manualAdj);
+        return { recordsDebt, manualDebtAdjustment: manualAdj, totalDebt };
+    }
+
+    // Helper: calculate weighted average purchase price and last purchase price for a weight category
+    function getWeightStats(catKey) {
+        const cat = inventory[catKey];
+        if (!cat) return { avgBuyPrice: 0, lastBuyPrice: 0 };
+        const batches = cat.batches || [];
+        if (batches.length === 0) {
+            return { avgBuyPrice: cat.buyPrice || 0, lastBuyPrice: cat.buyPrice || 0 };
+        }
+        let totalVal = 0;
+        let totalQty = 0;
+        batches.forEach(b => {
+            const q = Number(b.qty) || 0;
+            const p = Number(b.buyPrice) || 0;
+            totalVal += (q * p);
+            totalQty += q;
+        });
+        const avgBuyPrice = totalQty > 0 ? Math.round(totalVal / totalQty) : (cat.buyPrice || 0);
+        const lastBatch = batches[batches.length - 1];
+        const lastBuyPrice = (lastBatch && lastBatch.buyPrice) ? lastBatch.buyPrice : (cat.buyPrice || 0);
+        return { avgBuyPrice, lastBuyPrice };
+    }
+
+    /* Modal: Manual Debt Adjustment */
+    function openEditDebtModal() {
+        const c = customers[currentIndex];
+        if (!c) return;
+        const breakdown = getCustomerDebtBreakdown(c);
+        
+        document.getElementById('debtModalCustomerName').innerText = c.name;
+        document.getElementById('debtModalCurrentVal').innerText = `${formatNum(breakdown.totalDebt)} تومان`;
+        document.getElementById('debtOpType').value = 'set';
+        document.getElementById('debtNewAmount').value = breakdown.totalDebt > 0 ? formatNum(breakdown.totalDebt) : '';
+        document.getElementById('debtAdjustDate').value = getTodayLocal();
+        document.getElementById('debtAdjustNote').value = '';
+        
+        onDebtOpTypeChange();
+        previewDebtDiff();
+        document.getElementById('editDebtModal').classList.add('show');
+    }
+
+    function closeEditDebtModal() {
+        document.getElementById('editDebtModal').classList.remove('show');
+    }
+
+    function onDebtOpTypeChange() {
+        const op = document.getElementById('debtOpType').value;
+        const amountGroup = document.getElementById('debtAmountGroup');
+        const amountLabel = document.getElementById('debtAmountLabel');
+        const noteInput = document.getElementById('debtAdjustNote');
+        const amountInput = document.getElementById('debtNewAmount');
+        const c = customers[currentIndex];
+        const breakdown = getCustomerDebtBreakdown(c);
+
+        if (op === 'settle') {
+            amountGroup.style.display = 'none';
+            amountInput.value = '۰';
+            noteInput.placeholder = 'مثال: تسویه حساب کامل و توافقی با مشتری، مانده بدهی صفر گردید.';
+        } else if (op === 'discount') {
+            amountGroup.style.display = 'block';
+            amountLabel.innerText = 'مبلغ تخفیف / بخشودگی (تومان) *';
+            amountInput.placeholder = 'مثلاً: ۵۰۰,۰۰۰';
+            noteInput.placeholder = 'مثال: اعمال تخفیف فصلی و کسر از مانده بدهی';
+        } else if (op === 'legacy') {
+            amountGroup.style.display = 'block';
+            amountLabel.innerText = 'مبلغ مانده حساب قبلی اضافه شونده (تومان) *';
+            amountInput.placeholder = 'مثلاً: ۱,۵۰۰,۰۰۰';
+            noteInput.placeholder = 'مثال: مانده بدهی دفتری از سال قبل یا بار متفرقه';
+        } else {
+            // set
+            amountGroup.style.display = 'block';
+            amountLabel.innerText = 'مبلغ مانده بدهی قطعی جدید (تومان) *';
+            amountInput.placeholder = 'مثلاً: ۲,۰۰۰,۰۰۰';
+            noteInput.placeholder = 'مثال: اصلاح دستی بدهی بر مبنای دفتر حساب';
+        }
+        previewDebtDiff();
+    }
+
+    function previewDebtDiff() {
+        const c = customers[currentIndex];
+        if (!c) return;
+        const breakdown = getCustomerDebtBreakdown(c);
+        const op = document.getElementById('debtOpType').value;
+        const hintEl = document.getElementById('debtPreviewHint');
+        const enteredVal = parseNumericString(document.getElementById('debtNewAmount').value);
+
+        let finalProjected = 0;
+        if (op === 'settle') {
+            finalProjected = 0;
+            hintEl.innerHTML = `<span style="color:#15803d;">مانده بدهی مشتری پس از این عملیات صفر (۰ تومان) خواهد شد.</span>`;
+        } else if (op === 'discount') {
+            finalProjected = Math.max(0, breakdown.totalDebt - enteredVal);
+            hintEl.innerHTML = `مانده فعلی: ${formatNum(breakdown.totalDebt)} ت  ⬅️  <strong>مانده جدید پس از کسر تخفیف: ${formatNum(finalProjected)} تومان</strong>`;
+        } else if (op === 'legacy') {
+            finalProjected = breakdown.totalDebt + enteredVal;
+            hintEl.innerHTML = `مانده فعلی: ${formatNum(breakdown.totalDebt)} ت  ⬅️  <strong>مانده جدید با اضافه شدن بدهی قبلی: ${formatNum(finalProjected)} تومان</strong>`;
+        } else {
+            finalProjected = enteredVal;
+            const diff = finalProjected - breakdown.totalDebt;
+            hintEl.innerHTML = `تغییر نسبت به مانده فعلی: <strong>${diff >= 0 ? '+' : ''}${formatNum(diff)} تومان</strong> (مانده جدید: ${formatNum(finalProjected)} ت)`;
+        }
+    }
+
+    function saveManualDebtAdjustment() {
+        const c = customers[currentIndex];
+        if (!c) return;
+        const breakdown = getCustomerDebtBreakdown(c);
+        const op = document.getElementById('debtOpType').value;
+        const date = document.getElementById('debtAdjustDate').value.trim() || getTodayLocal();
+        const note = document.getElementById('debtAdjustNote').value.trim();
+        const enteredAmount = parseNumericString(document.getElementById('debtNewAmount').value);
+
+        let newTargetDebt = 0;
+        let recordNote = '';
+
+        if (op === 'settle') {
+            newTargetDebt = 0;
+            recordNote = note || 'تسویه حساب توافقی و صفر کردن مانده بدهی مشتری';
+        } else if (op === 'discount') {
+            if (enteredAmount <= 0) return alert('لطفاً مبلغ تخفیف را مشخص کنید.');
+            newTargetDebt = Math.max(0, breakdown.totalDebt - enteredAmount);
+            recordNote = (note || 'کسر تخفیف و بخشودگی از بدهی') + ` (مبلغ تخفیف: ${formatNum(enteredAmount)} تومان)`;
+        } else if (op === 'legacy') {
+            if (enteredAmount <= 0) return alert('لطفاً مبلغ بدهی اضافه شونده را وارد کنید.');
+            newTargetDebt = breakdown.totalDebt + enteredAmount;
+            recordNote = (note || 'انتقال مانده بدهی قبلی / دفتری') + ` (مبلغ: ${formatNum(enteredAmount)} تومان)`;
+        } else {
+            // direct set
+            newTargetDebt = Math.max(0, enteredAmount);
+            recordNote = note || `تعدیل و تنظیم دستی مانده بدهی به ${formatNum(newTargetDebt)} تومان`;
+        }
+
+        const diff = newTargetDebt - breakdown.totalDebt;
+
+        // Apply adjustment to customer
+        c.manualDebtAdjustment = (c.manualDebtAdjustment || 0) + diff;
+
+        // Also add an audit adjustment record into history for full transparency
+        c.records.unshift({
+            id: Date.now(),
+            isAdjustmentRecord: true,
+            cartons: 0,
+            weightCategory: 'medium',
+            buyPrice: 0,
+            sellPrice: 0,
+            total: Math.abs(diff),
+            paid: diff < 0 ? Math.abs(diff) : 0,
+            remaining: diff > 0 ? diff : 0,
+            status: diff <= 0 ? 'cash' : 'credit',
+            date: date,
+            note: `📝 سند دستی بدهی: ${recordNote} [مانده کل جدید: ${formatNum(newTargetDebt)} تومان]`,
+            signature: ''
+        });
+
+        saveToStorage();
+        closeEditDebtModal();
+        render();
+    }
+
+    function toggleManualRemainingOverride() {
+        const checkbox = document.getElementById('chkManualRemaining');
+        const remainingInput = document.getElementById('fRemaining');
+        if (!checkbox || !remainingInput) return;
+        isManualRemainingOverridden = checkbox.checked;
+        if (isManualRemainingOverridden) {
+            remainingInput.removeAttribute('readonly');
+            remainingInput.style.background = '#fff';
+            remainingInput.style.border = '2px solid #ef4444';
+            remainingInput.focus();
+        } else {
+            remainingInput.setAttribute('readonly', 'true');
+            remainingInput.style.background = '#fee2e2';
+            remainingInput.style.border = '1px solid #cbd5e1';
+            calcRemaining();
+        }
+    }
+
+    function openCustomerModal() {
+        document.getElementById('cName').value = '';
+        document.getElementById('cPhone').value = '';
+        document.getElementById('cShopAddr').value = '';
+        document.getElementById('cDelivAddr').value = '';
+        document.getElementById('customerModal').classList.add('show');
+    }
+
+    function closeCustomerModal() {
+        document.getElementById('customerModal').classList.remove('show');
+    }
+
+    function toggleOpTypeView() {
+        const op = document.getElementById('stockOpType').value;
+        const noteEl = document.getElementById('stockNotes');
+        if (op === 'set') {
+            noteEl.placeholder = 'مثال: شمارش فیزیکی پایان دوره و تطبیق کسر/اضافه انبار';
+        } else {
+            noteEl.placeholder = 'مثال: مرغداری سپیدان، حواله ۴۵۸، بار درجه یک';
+        }
+    }
+
+    function openStockModal(targetCatKey) {
+        const key = targetCatKey || 'medium';
+        document.getElementById('stockWeightKey').value = key;
+        document.getElementById('stockOpType').value = 'add';
+        document.getElementById('stockQty').value = '';
+        document.getElementById('stockDate').value = getTodayLocal();
+        document.getElementById('stockNotes').value = '';
+        toggleOpTypeView();
+        updateStockModalDefaults();
+        document.getElementById('stockModal').classList.add('show');
+    }
+
+    function closeStockModal() {
+        document.getElementById('stockModal').classList.remove('show');
+    }
+
+    function updateStockModalDefaults() {
+        const key = document.getElementById('stockWeightKey').value;
+        const cat = inventory[key];
+        if (cat) {
+            const stats = getWeightStats(key);
+            document.getElementById('stockBuyPrice').value = stats.lastBuyPrice || cat.buyPrice || '';
+            document.getElementById('stockSellPrice').value = cat.sellPrice || '';
+            document.getElementById('modalSelectedWeightName').innerText = `${cat.name} (موجودی فعلی: ${formatNum(cat.count)} کارتن)`;
+            renderBatchesTable(key);
+        }
+    }
+
+    function renderBatchesTable(key) {
+        const cat = inventory[key];
+        const container = document.getElementById('batchesTableContainer');
+        if (!cat || !cat.batches || cat.batches.length === 0) {
+            container.innerHTML = '<p style="text-align:center; padding:12px; color:#94a3b8; font-size:11px;">هیچ محموله ثبت‌شده‌ای برای این رده وزنی وجود ندارد.</p>';
+            return;
+        }
+
+        const stats = getWeightStats(key);
+        let rows = [...cat.batches].reverse().map(b => `
+            <tr>
+                <td>${b.date || '-'}</td>
+                <td style="font-weight:700;">${formatNum(b.qty)}</td>
+                <td style="color:#0f172a; font-weight:700;">${formatNum(b.buyPrice)} ت</td>
+                <td style="color:#475569; max-width:130px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${b.supplier || '-'}</td>
+            </tr>
+        `).join('');
+
+        container.innerHTML = `
+            <table class="batches-table">
+                <thead>
+                    <tr>
+                        <th>تاریخ</th>
+                        <th>کارتن</th>
+                        <th>خرید (تومان)</th>
+                        <th>تأمین‌کننده / منبع</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+            <div style="background:#f8fafc; padding:6px 10px; font-size:10.5px; display:flex; justify-content:space-between; border-top:1px solid #e2e8f0; color:#334155;">
+                <span>میانگین موزون خرید: <strong>${formatNum(stats.avgBuyPrice)} تومان</strong></span>
+                <span>آخرین نرخ ورودی: <strong>${formatNum(stats.lastBuyPrice)} تومان</strong></span>
+            </div>
+        `;
+    }
+
+    function saveStockAdjustment() {
+        const key = document.getElementById('stockWeightKey').value;
+        const op = document.getElementById('stockOpType').value;
+        const qty = parseFloat(document.getElementById('stockQty').value);
+        const buyPrice = parseFloat(document.getElementById('stockBuyPrice').value) || 0;
+        const sellPrice = parseFloat(document.getElementById('stockSellPrice').value) || 0;
+        const batchDate = document.getElementById('stockDate').value.trim() || getTodayLocal();
+        const batchNotes = document.getElementById('stockNotes').value.trim() || 'ورود محموله جدید';
+
+        if (isNaN(qty) || qty < 0) {
+            return alert('لطفاً تعداد معتبر کارتن را وارد نمایید');
+        }
+        if (buyPrice <= 0) {
+            return alert('لطفاً نرخ خرید این محموله را مشخص کنید');
+        }
+
+        if (!inventory[key].batches) {
+            inventory[key].batches = [];
+        }
+
+        if (op === 'add') {
+            inventory[key].count += qty;
+            inventory[key].batches.push({
+                id: Date.now(),
+                date: batchDate,
+                qty: qty,
+                buyPrice: buyPrice,
+                supplier: batchNotes
+            });
+        } else {
+            // Physical count adjustment
+            const diff = qty - inventory[key].count;
+            inventory[key].count = qty;
+            inventory[key].batches.push({
+                id: Date.now(),
+                date: batchDate,
+                qty: Math.abs(diff) || qty,
+                buyPrice: buyPrice,
+                supplier: `اصلاح شمارش فیزیکی (${diff >= 0 ? '+' : ''}${diff} کارتن) - ` + batchNotes
+            });
+        }
+
+        // Update reference purchase price to the latest entry
+        inventory[key].buyPrice = buyPrice;
+        if (sellPrice > 0) inventory[key].sellPrice = sellPrice;
+
+        saveToStorage();
+        closeStockModal();
+        render();
+    }
+
+    function checkLiveStockValidation() {
+        const weightSelect = document.getElementById('fWeightCategory');
+        const cartonInput = document.getElementById('fCartons');
+        const alertBox = document.getElementById('stockShortageAlert');
+        const zeroAlertBox = document.getElementById('stockZeroAlert');
+
+        if (!weightSelect || !cartonInput) return;
+
+        const key = weightSelect.value;
+        const cat = inventory[key];
+        const currentStock = cat ? Number(cat.count || 0) : 0;
+        const enteredQty = parseFloat(cartonInput.value) || 0;
+
+        // Check if stock is zero
+        if (currentStock <= 0) {
+            if (zeroAlertBox) {
+                zeroAlertBox.style.display = 'flex';
+                zeroAlertBox.innerHTML = `
+                    <div style="font-size:16px;">🛑</div>
+                    <div style="flex:1; font-size:12px; color:#991b1b; line-height:1.4;">
+                        <strong>اتمام موجودی رده ${cat ? cat.name : ''}:</strong> در حال حاضر این کالا در انبار صفر است. ثبت فاکتور منجر به موجودی منفی خواهد شد.
+                    </div>
+                    <button type="button" class="btn btn-outline" onclick="openStockModal('${key}')" style="background:#dc2626; color:#fff; border:none; padding:4px 10px; font-size:11px; white-space:nowrap;">
+                        ➕ ورود بار جدید
+                    </button>
+                `;
+            }
+        } else {
+            if (zeroAlertBox) zeroAlertBox.style.display = 'none';
+        }
+
+        // Live validation for entered quantity vs stock
+        if (enteredQty > currentStock) {
+            cartonInput.classList.add('input-error');
+            const shortage = enteredQty - currentStock;
+            if (alertBox) {
+                alertBox.style.display = 'flex';
+                alertBox.innerHTML = `
+                    <div style="font-size:20px; line-height:1;">⚠️</div>
+                    <div style="flex:1; font-size:12px; color:#991b1b; line-height:1.5;">
+                        <strong style="display:block; font-size:12.5px; margin-bottom:2px;">هشدار کسری موجودی انبار:</strong>
+                        تعداد درخواستی (${formatNum(enteredQty)} کارتن) از موجودی انبار بیشتر است!
+                        <div style="display:flex; gap:12px; margin-top:4px; font-weight:700; font-size:11.5px; color:#7f1d1d;">
+                            <span>📦 موجودی فعلی: <u>${formatNum(currentStock)}</u> کارتن</span>
+                            <span style="color:#b91c1c;">🚨 کسری: <u>${formatNum(shortage)}</u> کارتن</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline" onclick="openStockModal('${key}')" style="background:#fee2e2; color:#b91c1c; border-color:#fca5a5; padding:5px 8px; font-size:11px; white-space:nowrap; align-self:center;">
+                        📦 افزایش موجودی
+                    </button>
+                `;
+            }
+        } else {
+            cartonInput.classList.remove('input-error');
+            if (alertBox) {
+                alertBox.style.display = 'none';
+                alertBox.innerHTML = '';
+            }
+        }
+    }
+
+    function onWeightCategoryChange() {
+        const weightSelect = document.getElementById('fWeightCategory');
+        if (!weightSelect) return;
+        const key = weightSelect.value;
+        const cat = inventory[key];
+        if (cat) {
+            const stats = getWeightStats(key);
+            const defaultBuy = stats.lastBuyPrice || cat.buyPrice || 0;
+            document.getElementById('fBuyPrice').value = defaultBuy;
+            document.getElementById('fSellPrice').value = cat.sellPrice || '';
+            calcTotals();
+            checkLiveStockValidation();
+        }
+    }
+
+    function saveCustomer() {
+        const name = document.getElementById('cName').value.trim();
+        const phone = document.getElementById('cPhone').value.trim();
+        const shopAddr = document.getElementById('cShopAddr').value.trim() || 'ثبت نشده';
+        const delivAddr = document.getElementById('cDelivAddr').value.trim() || 'ثبت نشده';
+        if (!name) return alert('لطفاً نام مشتری را وارد کنید');
+        customers.push({ id: Date.now(), name, phone, shopAddr, delivAddr, manualDebtAdjustment: 0, records: [] });
+        currentIndex = customers.length - 1;
+        saveToStorage();
+        closeCustomerModal();
+        render();
+    }
+
+    function changeSlide(dir) {
+        if (!customers.length) return;
+        currentIndex = (currentIndex + dir + customers.length) % customers.length;
+        render();
+    }
+
+    function selectCustomer(index) {
+        currentIndex = index;
+        render();
+    }
+
+    function calcTotals() {
+        const cartons = parseFloat(document.getElementById('fCartons').value) || 0;
+        const sellPrice = parseFloat(document.getElementById('fSellPrice').value) || 0;
+        const total = cartons * sellPrice;
+        document.getElementById('fTotal').value = total;
+        
+        const paidInput = document.getElementById('fPaid');
+        if (!paidInput.dataset.manual) {
+            paidInput.value = total;
+        }
+        calcRemaining();
+        checkLiveStockValidation();
+    }
+
+    function calcRemaining() {
+        const total = parseFloat(document.getElementById('fTotal').value) || 0;
+        const paid = parseFloat(document.getElementById('fPaid').value) || 0;
+        if (!isManualRemainingOverridden) {
+            const remaining = total - paid;
+            document.getElementById('fRemaining').value = remaining > 0 ? remaining : 0;
+        }
+    }
+
+    function markPaidManual() {
+        document.getElementById('fPaid').dataset.manual = "true";
+        calcRemaining();
+    }
+
+    function initCanvas() {
+        canvas = document.getElementById('sigCanvas');
+        if (!canvas) return;
+        ctx = canvas.getContext('2d');
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('mouseleave', stopDraw);
+        canvas.addEventListener('touchstart', (e) => { startDraw(e.touches[0]); e.preventDefault(); });
+        canvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
+        canvas.addEventListener('touchend', stopDraw);
+    }
+
+    function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    function startDraw(e) {
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function stopDraw() { isDrawing = false; }
+    function clearSignature() { if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+    function addRecord() {
+        const cartons = parseFloat(document.getElementById('fCartons').value) || 0;
+        const weightCat = document.getElementById('fWeightCategory').value;
+        const buyPrice = parseFloat(document.getElementById('fBuyPrice').value) || 0;
+        const sellPrice = parseFloat(document.getElementById('fSellPrice').value) || 0;
+        const total = parseFloat(document.getElementById('fTotal').value) || 0;
+        const paid = parseFloat(document.getElementById('fPaid').value) || 0;
+        const remaining = parseFloat(document.getElementById('fRemaining').value) || 0;
+        const date = document.getElementById('fDate').value.trim() || getTodayLocal();
+        const note = document.getElementById('fNote').value.trim();
+
+        if (!cartons || cartons <= 0) return alert('لطفاً تعداد معتبر کارتن را وارد کنید');
+        if (!sellPrice || sellPrice <= 0) return alert('لطفاً قیمت فروش را وارد کنید');
+
+        const currentStock = inventory[weightCat] ? inventory[weightCat].count : 0;
+
+        // If cartons exceeds available inventory, show confirmation/warning modal
+        if (cartons > currentStock) {
+            pendingShortageRecord = {
+                cartons,
+                weightCat,
+                buyPrice,
+                sellPrice,
+                total,
+                paid,
+                remaining,
+                date,
+                note,
+                signature: canvas ? canvas.toDataURL() : ''
+            };
+            openShortageModal(weightCat, currentStock, cartons);
+            return;
+        }
+
+        // Deduct from inventory count directly
+        if (inventory[weightCat]) {
+            inventory[weightCat].count = Math.max(0, inventory[weightCat].count - cartons);
+        }
+
+        const sigData = canvas ? canvas.toDataURL() : '';
+        customers[currentIndex].records.unshift({
+            id: Date.now(),
+            cartons,
+            weightCategory: weightCat,
+            buyPrice,
+            sellPrice,
+            total,
+            paid,
+            remaining,
+            status: remaining === 0 ? 'cash' : 'credit',
+            date,
+            note: isManualRemainingOverridden ? (note ? note + ' (مانده دستی)' : 'مانده بدهی این فاکتور به صورت دستی تعیین گردید') : note,
+            signature: sigData
+        });
+        isManualRemainingOverridden = false;
+        saveToStorage();
+        render();
+    }
+
+    function openShortageModal(catKey, currentStock, requestedQty) {
+        const cat = inventory[catKey];
+        const shortage = requestedQty - currentStock;
+        const modal = document.getElementById('shortageModal');
+        const details = document.getElementById('shortageModalDetails');
+
+        details.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#475569;">
+                <span>رده وزنی:</span>
+                <strong>${cat ? cat.name : ''}</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#0f172a;">
+                <span>تعداد درخواستی فاکتور:</span>
+                <strong style="font-size:14px;">${formatNum(requestedQty)} کارتن</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#15803d;">
+                <span>موجودی فعلی در انبار:</span>
+                <strong>${formatNum(currentStock)} کارتن</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; color:#b91c1c; border-top:1px dashed #fecdd3; padding-top:6px; font-weight:800;">
+                <span>کسری / مازاد انبار:</span>
+                <span>${formatNum(shortage)} کارتن کمبود</span>
+            </div>
+        `;
+        modal.classList.add('show');
+    }
+
+    function closeShortageModal() {
+        document.getElementById('shortageModal').classList.remove('show');
+    }
+
+    function proceedToStockFromShortage() {
+        const catKey = pendingShortageRecord ? pendingShortageRecord.weightCat : 'medium';
+        closeShortageModal();
+        openStockModal(catKey);
+    }
+
+    function confirmForceSubmitRecord() {
+        if (!pendingShortageRecord) return;
+        const r = pendingShortageRecord;
+        
+        // Deduct from inventory (can result in negative stock)
+        if (inventory[r.weightCat]) {
+            inventory[r.weightCat].count = inventory[r.weightCat].count - r.cartons;
+        }
+
+        customers[currentIndex].records.unshift({
+            id: Date.now(),
+            cartons: r.cartons,
+            weightCategory: r.weightCat,
+            buyPrice: r.buyPrice,
+            sellPrice: r.sellPrice,
+            total: r.total,
+            paid: r.paid,
+            remaining: r.remaining,
+            status: r.remaining === 0 ? 'cash' : 'credit',
+            date: r.date,
+            note: (r.note ? r.note + ' - ' : '') + 'ثبت با کسری موجودی انبار (پیش‌فروش)',
+            signature: r.signature
+        });
+
+        pendingShortageRecord = null;
+        closeShortageModal();
+        saveToStorage();
+        render();
+    }
+
+    function sendToRubika(recId) {
+        const c = customers[currentIndex];
+        const r = c.records.find(item => item.id === recId);
+        if (!r) return;
+        const weightTitle = (inventory[r.weightCategory] && inventory[r.weightCategory].name) || 'تخم‌مرغ درجه یک';
+        const statusText = r.remaining === 0 ? '🟢 تسویه کامل (نقد)' : `🔴 مانده بدهی: ${formatNum(r.remaining)} تومان`;
+        const text = `📋 *فاکتور تحویل و حسابرسی کارتن تخم‌مرغ*
+📅 تاریخ: ${r.date}
+شماره سند: #${r.id.toString().slice(-6)}
+-----------------------------
+👤 مشتری: ${c.name}
+📞 تلفن: ${c.phone}
+🏪 آدرس: ${c.shopAddr}
+🚚 تحویل: ${c.delivAddr}
+-----------------------------
+${r.isAdjustmentRecord ? '⚖️ سند تعدیل و تغییر دستی مانده بدهی' : `⚖️ رده وزنی بار: ${weightTitle}
+📦 تعداد کارتن: ${formatNum(r.cartons)} عدد
+🏷 قیمت فروش هر کارتن: ${formatNum(r.sellPrice)} تومان`}
+💰 مبلغ سند: ${formatNum(r.total)} تومان
+💵 پرداخت شده: ${formatNum(r.paid)} تومان
+📌 وضعیت: ${statusText}
+${r.note ? '📝 توضیحات: ' + r.note : ''}
+-----------------------------
+✅ سیستم ثبت فاکتور و حسابرسی کارتن تخم‌مرغ`;
+        if (navigator.share) {
+            navigator.share({ title: 'فاکتور کارتن تخم‌مرغ', text: text }).catch(() => {});
+        } else {
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+    }
+
+    function openInvoiceModal(recId) {
+        const c = customers[currentIndex];
+        const r = c.records.find(item => item.id === recId);
+        if (!r) return;
+
+        const isSettled = r.remaining === 0;
+        const invNo = 'INV-' + r.id.toString().slice(-6);
+        const weightName = (inventory[r.weightCategory] && inventory[r.weightCategory].name) || 'کارتن تخم‌مرغ خوراکی';
+
+        const html = `
+            <div class="invoice-sheet">
+                <!-- Stamp -->
+                <div class="inv-stamp ${isSettled ? 'stamp-settled' : 'stamp-debt'}">
+                    ${isSettled ? '✓ تسویه کامل (نقدی)' : '⚠ بدهکار / نسیه'}
+                </div>
+
+                <!-- Invoice Header -->
+                <div class="inv-header">
+                    <div>
+                        <div class="inv-brand">رسید رسمی تحویل کارتن تخم‌مرغ و صورت‌حساب</div>
+                        <div class="inv-sub">سامانه هوشمند توزیع، حسابرسی و موجودی انبار کارتن تخم‌مرغ (ذخیره آفلاین)</div>
+                    </div>
+                    <div style="text-align:left;">
+                        <div class="inv-badge-num">شماره فاکتور: <strong>${invNo}</strong></div>
+                        <div style="font-size:12px; color:#475569; margin-top:4px;">تاریخ: <strong>${r.date}</strong></div>
+                    </div>
+                </div>
+
+                <!-- Customer Details -->
+                <div class="inv-customer-box">
+                    <div><strong>خریدار / تحویل‌گیرنده:</strong> ${c.name}</div>
+                    <div><strong>شماره تماس:</strong> ${c.phone || '-'}</div>
+                    <div><strong>نشانی مغازه / محل کسب:</strong> ${c.shopAddr}</div>
+                    <div><strong>محل و شیوه تحویل:</strong> ${c.delivAddr}</div>
+                </div>
+
+                <!-- Invoice Items Table -->
+                <table class="inv-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px;">ردیف</th>
+                            <th>شرح کالا / رده وزنی / نوع سند</th>
+                            <th style="width:90px;">تعداد (کارتن)</th>
+                            <th style="width:120px;">فی واحد (تومان)</th>
+                            <th style="width:130px;">مبلغ کل (تومان)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>۱</td>
+                            <td style="text-align:right; font-weight:600;">
+                                ${r.isAdjustmentRecord ? 'سند حسابداری تعدیل دستی مانده حساب مشتری' : `کارتن تخم‌مرغ خوراکی (${weightName})`}
+                            </td>
+                            <td>${r.isAdjustmentRecord ? '-' : formatNum(r.cartons)}</td>
+                            <td>${r.isAdjustmentRecord ? '-' : formatNum(r.sellPrice)}</td>
+                            <td><strong>${formatNum(r.total)}</strong></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background:#f8fafc; font-weight:bold;">
+                            <td colspan="4" style="text-align:left; padding-left:12px;">جمع کل سند:</td>
+                            <td style="color:#0f172a; font-size:13.5px;">${formatNum(r.total)} تومان</td>
+                        </tr>
+                        <tr style="background:#f0fdf4; color:#15803d; font-weight:bold;">
+                            <td colspan="4" style="text-align:left; padding-left:12px;">مبلغ پرداخت شده (نقد / واریزی):</td>
+                            <td>${formatNum(r.paid)} تومان</td>
+                        </tr>
+                        <tr style="background:${isSettled ? '#f0fdf4' : '#fef2f2'}; color:${isSettled ? '#15803d' : '#b91c1c'}; font-weight:bold; font-size:13px;">
+                            <td colspan="4" style="text-align:left; padding-left:12px;">باقیمانده حساب این سند (بدهی):</td>
+                            <td>${formatNum(r.remaining)} تومان</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- Notes -->
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:8px 12px; font-size:11.5px; color:#475569; margin-bottom:14px;">
+                    <strong>توضیحات و شرایط تحویل:</strong> ${r.note || 'کارتن‌های تخم‌مرغ به صورت سالم، کامل و با شمارش دقیق تحویل خریدار گردید.'}
+                </div>
+
+                <!-- Signatures -->
+                <div class="inv-signatures">
+                    <div class="inv-sig-box">
+                        <span>مهر و امضای انبار / تحویل‌دهنده</span>
+                        <div style="font-size:11px; color:#94a3b8; font-style:italic;">سیستم حسابرسی کارتن تخم‌مرغ</div>
+                    </div>
+                    <div class="inv-sig-box">
+                        <span>امضای خریدار / تحویل‌گیرنده</span>
+                        ${r.signature ? `<img src="${r.signature}" style="max-height:55px; max-width:140px; object-fit:contain;" alt="امضای دیجیتال">` : `<span style="font-size:11px; color:#94a3b8;">امضای فیزیکی در محل تحویل</span>`}
+                    </div>
+                </div>
+
+                <div style="margin-top:16px; text-align:center; font-size:10px; color:#94a3b8; border-top:1px solid #f1f5f9; padding-top:8px;">
+                    این برگ فاکتور رسمی معتبر است و نسخه دیجیتال آن در حافظه امن آفلاین ثبت گردیده است.
+                </div>
+            </div>
+        `;
+
+        document.getElementById('invoiceSheetContainer').innerHTML = html;
+        document.getElementById('invoiceModal').classList.add('show');
+    }
+
+    function closeInvoiceModal() {
+        document.getElementById('invoiceModal').classList.remove('show');
+    }
+
+    function toggleStatus(recId) {
+        const rec = customers[currentIndex].records.find(r => r.id === recId);
+        if (rec) {
+            if (rec.remaining > 0) {
+                rec.paid = rec.total;
+                rec.remaining = 0;
+                rec.status = 'cash';
+            } else {
+                rec.remaining = rec.total;
+                rec.paid = 0;
+                rec.status = 'credit';
+            }
+            saveToStorage();
+            render();
+        }
+    }
+
+    function deleteRecord(recId) {
+        if (!confirm('فاکتور یا سند حذف شود؟ (توجه: در صورت فاکتور کالا، کارتن‌ها به انبار بازگردانده می‌شوند)')) return;
+        const rec = customers[currentIndex].records.find(r => r.id === recId);
+        if (rec && !rec.isAdjustmentRecord && rec.weightCategory && inventory[rec.weightCategory]) {
+            // Restore inventory count
+            inventory[rec.weightCategory].count += Number(rec.cartons || 0);
+        }
+        customers[currentIndex].records = customers[currentIndex].records.filter(r => r.id !== recId);
+        saveToStorage();
+        render();
+    }
+
+    function deleteCustomer() {
+        if (!confirm('آیا از حذف کامل این مشتری و تمام فاکتورهای آن اطمینان دارید؟')) return;
+        customers.splice(currentIndex, 1);
+        if (currentIndex >= customers.length) currentIndex = Math.max(0, customers.length - 1);
+        saveToStorage();
+        render();
+    }
+
+    function exportData() {
+        const backupData = { customers: customers, inventory: inventory, exportedAt: new Date().toISOString() };
+        const fileName = `hesabresi-egg-inventory-backup-${new Date().toISOString().slice(0,10)}.json`;
+        const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+        try {
+            const file = new File([blob], fileName, { type: 'application/json' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                navigator.share({ files: [file], title: 'پشتیبان حسابرسی' }).catch(() => {});
+                return;
+            }
+        } catch (e) {}
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = fileName;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+
+    function renderInventoryCards() {
+        const container = document.getElementById('invCardsContainer');
+        const summaryBox = document.getElementById('managerSummaryBox');
+        let totalStockBuyValue = 0;
+
+        const lightStats = getWeightStats('light');
+        const medStats = getWeightStats('medium');
+        const heavyStats = getWeightStats('heavy');
+
+        // Helper to get stock status styling & tags
+        function getStockBadgeMeta(count) {
+            if (count <= 0) {
+                return {
+                    badgeClass: 'stock-badge-out',
+                    tagHtml: '<span class="stock-level-tag tag-out">⚠️ اتمام موجودی</span>',
+                    countColor: '#dc2626'
+                };
+            }
+            if (count < 20) {
+                return {
+                    badgeClass: 'stock-badge-low',
+                    tagHtml: '<span class="stock-level-tag tag-low">⚡ کسری / رو به اتمام</span>',
+                    countColor: '#b45309'
+                };
+            }
+            return {
+                badgeClass: '',
+                tagHtml: '',
+                countColor: '#0f172a'
+            };
+        }
+
+        const lMeta = getStockBadgeMeta(inventory.light.count);
+        const mMeta = getStockBadgeMeta(inventory.medium.count);
+        const hMeta = getStockBadgeMeta(inventory.heavy.count);
+
+        const cardsHtml = `
+            <div class="weight-badge w-light ${lMeta.badgeClass}">
+                ${lMeta.tagHtml}
+                <div class="weight-title">سبک</div>
+                <div class="weight-sub">۱۰ الی ۱۱ کیلوگرم</div>
+                <div class="weight-count" style="color:${lMeta.countColor}">${formatNum(inventory.light.count)}<span class="weight-unit">کارتن</span></div>
+                ${showManagerPrices ? `
+                    <div class="cost-revealed-pill">
+                        <div class="cost-revealed-row">
+                            <span>آخرین ورودی:</span>
+                            <strong>${formatNum(lightStats.lastBuyPrice)} ت</strong>
+                        </div>
+                        <div class="cost-revealed-row" style="color:#b45309; border-top:1px dashed #fde68a; padding-top:2px;">
+                            <span>میانگین محموله:</span>
+                            <strong>${formatNum(lightStats.avgBuyPrice)} ت</strong>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="cost-hidden-pill">خرید: ***</div>
+                `}
+            </div>
+
+            <div class="weight-badge w-mid ${mMeta.badgeClass}">
+                ${mMeta.tagHtml}
+                <div class="weight-title">استاندارد</div>
+                <div class="weight-sub">۱۱.۵ الی ۱۲.۵ کیلوگرم</div>
+                <div class="weight-count" style="color:${mMeta.countColor}">${formatNum(inventory.medium.count)}<span class="weight-unit">کارتن</span></div>
+                ${showManagerPrices ? `
+                    <div class="cost-revealed-pill">
+                        <div class="cost-revealed-row">
+                            <span>آخرین ورودی:</span>
+                            <strong>${formatNum(medStats.lastBuyPrice)} ت</strong>
+                        </div>
+                        <div class="cost-revealed-row" style="color:#b45309; border-top:1px dashed #fde68a; padding-top:2px;">
+                            <span>میانگین محموله:</span>
+                            <strong>${formatNum(medStats.avgBuyPrice)} ت</strong>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="cost-hidden-pill">خرید: ***</div>
+                `}
+            </div>
+
+            <div class="weight-badge w-heavy ${hMeta.badgeClass}">
+                ${hMeta.tagHtml}
+                <div class="weight-title">سنگین</div>
+                <div class="weight-sub">۱۳ کیلوگرم به بالا</div>
+                <div class="weight-count" style="color:${hMeta.countColor}">${formatNum(inventory.heavy.count)}<span class="weight-unit">کارتن</span></div>
+                ${showManagerPrices ? `
+                    <div class="cost-revealed-pill">
+                        <div class="cost-revealed-row">
+                            <span>آخرین ورودی:</span>
+                            <strong>${formatNum(heavyStats.lastBuyPrice)} ت</strong>
+                        </div>
+                        <div class="cost-revealed-row" style="color:#b45309; border-top:1px dashed #fde68a; padding-top:2px;">
+                            <span>میانگین محموله:</span>
+                            <strong>${formatNum(heavyStats.avgBuyPrice)} ت</strong>
+                        </div>
+                    </div>
+                ` : `
+                    <div class="cost-hidden-pill">خرید: ***</div>
+                `}
+            </div>
+        `;
+        container.innerHTML = cardsHtml;
+
+        if (showManagerPrices) {
+            // Evaluated stock value using weighted average cost
+            totalStockBuyValue = (Math.max(0, inventory.light.count) * lightStats.avgBuyPrice) +
+                                 (Math.max(0, inventory.medium.count) * medStats.avgBuyPrice) +
+                                 (Math.max(0, inventory.heavy.count) * heavyStats.avgBuyPrice);
+            document.getElementById('managerTotalStockValue').innerText = `${formatNum(totalStockBuyValue)} تومان`;
+            summaryBox.style.display = 'block';
+        } else {
+            summaryBox.style.display = 'none';
+        }
+    }
+
+    function render() {
+        updateManagerPrivacyUI();
+        renderInventoryCards();
+
+        const tabsEl = document.getElementById('tabsContainer');
+        const navEl = document.getElementById('sliderNav');
+        const mainEl = document.getElementById('mainContent');
+
+        if (customers.length === 0) {
+            tabsEl.innerHTML = '';
+            navEl.style.display = 'none';
+            mainEl.innerHTML = `
+                <div class="empty-state">
+                    <svg fill="none" height="48" stroke="#94a3b8" stroke-width="1.5" viewbox="0 0 24 24" width="48" style="margin:0 auto 12px;"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    <h3 style="font-weight:700; color:#1e293b; margin-bottom:6px;">هنوز مشتری ثبت نشده</h3>
+                    <p style="font-size:13px; margin-bottom:16px;">برای شروع محاسبات و ثبت کارتن، اولین مشتری را اضافه کنید.</p>
+                    <button class="btn btn-primary" onclick="openCustomerModal()">+ افزودن مشتری جدید</button>
+                </div>`;
+            return;
+        }
+
+        navEl.style.display = 'flex';
+        document.getElementById('slideCounter').innerText = `مشتری ${currentIndex + 1} از ${customers.length}`;
+        tabsEl.innerHTML = customers.map((c, idx) => `
+            <div class="tab-chip ${idx === currentIndex ? 'active' : ''}" onclick="selectCustomer(${idx})">${c.name}</div>
+        `).join('');
+
+        const c = customers[currentIndex];
+        let totalCartons = 0, totalPaidSum = 0;
+        let totalProfitSum = 0;
+
+        c.records.forEach(r => {
+            totalCartons += Number(r.cartons || 0);
+            totalPaidSum += Number(r.paid || 0);
+            if (r.buyPrice && r.sellPrice && !r.isAdjustmentRecord) {
+                totalProfitSum += (Number(r.sellPrice) - Number(r.buyPrice)) * Number(r.cartons || 0);
+            }
+        });
+
+        const debtBreakdown = getCustomerDebtBreakdown(c);
+
+        // Default buy price based on medium weight category
+        const medStats = getWeightStats('medium');
+        const defaultInitialBuy = medStats.lastBuyPrice || inventory.medium.buyPrice || '';
+
+        // Labels for weight select dropdown indicating out-of-stock
+        const lightLabel = inventory.light.count <= 0 
+            ? `سبک (۱۰ الی ۱۱ کیلوگرم) — ⚠️ (ناموجود / اتمام موجودی)`
+            : `سبک (۱۰ الی ۱۱ کیلوگرم) — موجودی انبار: ${formatNum(inventory.light.count)} کارتن${inventory.light.count < 20 ? ' ⚡' : ''}`;
+            
+        const medLabel = inventory.medium.count <= 0
+            ? `استاندارد (۱۱.۵ الی ۱۲.۵ کیلوگرم) — ⚠️ (ناموجود / اتمام موجودی)`
+            : `استاندارد (۱۱.۵ الی ۱۲.۵ کیلوگرم) — موجودی انبار: ${formatNum(inventory.medium.count)} کارتن${inventory.medium.count < 20 ? ' ⚡' : ''}`;
+
+        const heavyLabel = inventory.heavy.count <= 0
+            ? `سنگین (۱۳ کیلوگرم به بالا) — ⚠️ (ناموجود / اتمام موجودی)`
+            : `سنگین (۱۳ کیلوگرم به بالا) — موجودی انبار: ${formatNum(inventory.heavy.count)} کارتن${inventory.heavy.count < 20 ? ' ⚡' : ''}`;
+
+        mainEl.innerHTML = `
+            <div class="customer-card">
+                <div class="cust-header">
+                    <div>
+                        <div class="cust-name">${c.name}</div>
+                        <a href="tel:${c.phone}" class="cust-phone">📞 ${c.phone || 'بدون شماره'}</a>
+                    </div>
+                    <button class="btn btn-outline" style="background:#fee2e2;color:#b91c1c;border-color:#fecaca;" onclick="deleteCustomer()">حذف مشتری</button>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item"><b>🏪 آدرس مغازه:</b> ${c.shopAddr}</div>
+                    <div class="info-item"><b>🚚 محل تحویل بار:</b> ${c.delivAddr}</div>
+                </div>
+                <div class="summary-grid">
+                    <div class="sum-box sum-carton">کل کارتن‌ها<strong>${formatNum(totalCartons)}</strong></div>
+                    <div class="sum-box sum-cash">کل پرداختی (تومان)<strong>${formatNum(totalPaidSum)}</strong></div>
+                    <div class="sum-box sum-credit">
+                        مانده بدهی (تومان)
+                        <strong>${formatNum(debtBreakdown.totalDebt)}</strong>
+                        <button class="btn-edit-debt" onclick="openEditDebtModal()" title="تنظیم یا اصلاح دستی مانده بدهی">
+                            ✏️ ویرایش دستی بدهی
+                        </button>
+                    </div>
+                </div>
+                ${c.manualDebtAdjustment ? `
+                    <div style="background:#fff7ed; border:1px solid #ffedd5; border-radius:10px; padding:6px 12px; margin-top:8px; font-size:11px; color:#c2410c; display:flex; justify-content:space-between; align-items:center;">
+                        <span>⚖️ اثر تعدیلات دستی در مانده این مشتری: <strong>${c.manualDebtAdjustment > 0 ? '+' : ''}${formatNum(c.manualDebtAdjustment)} تومان</strong></span>
+                        <button onclick="openEditDebtModal()" style="background:none; border:none; color:#ea580c; cursor:pointer; font-weight:700; text-decoration:underline;">اصلاح سند دستی</button>
+                    </div>
+                ` : ''}
+                ${showManagerPrices ? `
+                    <div style="background:#fefce8; border:1px dashed #facc15; border-radius:10px; padding:8px 12px; margin-top:10px; display:flex; justify-content:space-between; align-items:center; font-size:12px; color:#854d0e;">
+                        <span>💰 سود خالص برآورد شده از این مشتری:</span>
+                        <strong style="color:#15803d; font-size:13.5px;">${formatNum(totalProfitSum)} تومان</strong>
+                    </div>
+                ` : ''}
+            </div>
+
+            <div class="form-card">
+                <div class="form-title">
+                    <span>➕ ثبت فاکتور جدید، قیمت و مانده حساب</span>
+                    <span style="font-size:11px; font-weight:normal; color:#64748b;">امضای الکترونیک</span>
+                </div>
+
+                <!-- Weight Category Selection for Egg Cartons with Stock Labels -->
+                <div class="form-group" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px; margin-bottom:12px;">
+                    <label style="color:#0f172a; font-weight:800; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                        <span>⚖️ رده وزنی کارتن تخم‌مرغ *</span>
+                        <span style="font-size:11px; font-weight:normal; color:#2563eb;">بررسی لحظه‌ای موجودی</span>
+                    </label>
+                    <select class="form-control" id="fWeightCategory" onchange="onWeightCategoryChange()">
+                        <option value="light">${lightLabel}</option>
+                        <option value="medium" selected>${medLabel}</option>
+                        <option value="heavy">${heavyLabel}</option>
+                    </select>
+
+                    <!-- Alert shown immediately if selected category is completely out of stock -->
+                    <div id="stockZeroAlert" class="stock-zero-alert" style="display:none;"></div>
+                </div>
+
+                <div class="input-row">
+                    <div>
+                        <label>تعداد کارتن *</label>
+                        <input type="number" id="fCartons" class="form-control" placeholder="تعداد" oninput="calcTotals()">
+                    </div>
+                    <div>
+                        <label>تاریخ فاکتور</label>
+                        <input type="text" id="fDate" class="form-control" value="${getTodayLocal()}">
+                    </div>
+                </div>
+
+                <!-- Live validation warning box immediately under cartons field -->
+                <div id="stockShortageAlert" class="stock-shortage-alert" style="display:none;"></div>
+                
+                <div class="input-row">
+                    <div>
+                        <label style="display:flex; justify-content:space-between; align-items:center;">
+                            <span>قیمت خرید هر کارتن (تومان)</span>
+                            ${!showManagerPrices ? '<span style="color:#94a3b8; font-size:10px;">🔒 مخفی برای مشتری</span>' : '<span style="color:#16a34a; font-size:10px;">✓ دید مدیر فعال (محموله)</span>'}
+                        </label>
+                        <input type="${showManagerPrices ? 'number' : 'password'}" id="fBuyPrice" class="form-control" placeholder="قیمت خرید" value="${defaultInitialBuy}">
+                    </div>
+                    <div><label>قیمت فروش هر کارتن (تومان) *</label><input type="number" id="fSellPrice" class="form-control" placeholder="قیمت فروش" value="${inventory.medium.sellPrice || ''}" oninput="calcTotals()"></div>
+                </div>
+                <div class="input-row">
+                    <div><label>مبلغ کل فروش (محاسبه خودکار)</label><input type="number" id="fTotal" class="form-control" readonly style="background:#f1f5f9; font-weight:bold;"></div>
+                    <div><label>مبلغ پرداخت شده (نقد)</label><input type="number" id="fPaid" class="form-control" placeholder="پرداختی" oninput="markPaidManual()" style="border-color:#16a34a;"></div>
+                </div>
+                <div class="input-row">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                            <label style="margin:0; font-size:11.5px; color:#475569; font-weight:700;">مانده نهایی (بدهی)</label>
+                            <label style="margin:0; font-size:11px; color:#2563eb; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+                                <input type="checkbox" id="chkManualRemaining" onchange="toggleManualRemainingOverride()" style="cursor:pointer; vertical-align:middle;">
+                                <span>تعدیل دستی</span>
+                            </label>
+                        </div>
+                        <input type="number" id="fRemaining" class="form-control" readonly style="background:#fee2e2; color:#b91c1c; font-weight:bold;">
+                    </div>
+                    <div><label>توضیحات و شرایط</label><input type="text" id="fNote" class="form-control" placeholder="یادداشت فاکتور..."></div>
+                </div>
+                <div class="form-group" style="margin-top:10px;">
+                    <label>✍️ امضای دیجیتال خریدار:</label>
+                    <div class="sig-container">
+                        <canvas id="sigCanvas" width="400" height="110"></canvas>
+                        <div class="sig-actions">
+                            <span>انگشت یا قلم خود را در کادر بالا بکشید</span>
+                            <button type="button" class="btn btn-outline" style="background:#e2e8f0;color:#1e293b;padding:3px 10px;font-size:11px;" onclick="clearSignature()">پاک کردن امضا</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width:100%; padding:12px; font-size:14px; margin-top:6px;" onclick="addRecord()">
+                    <svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    ثبت فاکتور و کسر خودکار از انبار
+                </button>
+            </div>
+
+            <div class="form-card">
+                <div class="form-title">
+                    <span>📋 سوابق فاکتورها، اسناد بدهی و عملیات چاپ / ارسال</span>
+                    <span style="font-size:12px; font-weight:700; color:#2563eb;">${c.records.length} ردیف</span>
+                </div>
+                ${c.records.length === 0 ? '<p style="text-align:center;color:#94a3b8;font-size:13px;padding:16px;">هنوز فاکتوری برای این مشتری ثبت نشده است</p>' : 
+                c.records.map(r => {
+                    const weightBadgeLabel = r.weightCategory === 'light' ? 'سبک (۱۰-۱۱ک)' : 
+                                            (r.weightCategory === 'heavy' ? 'سنگین (+۱۳ک)' : 'استاندارد (۱۲ک)');
+                    const margin = (r.buyPrice && r.sellPrice && !r.isAdjustmentRecord) ? (r.sellPrice - r.buyPrice) * r.cartons : null;
+                    const itemClass = r.isAdjustmentRecord ? 'tx-adjustment' : (r.remaining === 0 ? 'tx-cash' : 'tx-credit');
+                    const badgeClass = r.isAdjustmentRecord ? 'badge-adjustment' : (r.remaining === 0 ? 'badge-cash' : 'badge-credit');
+                    const badgeTitle = r.isAdjustmentRecord ? '📝 سند دستی بدهی' : (r.remaining === 0 ? '✓ تسویه کامل (نقد)' : '⚠ بدهکار (نسیه)');
+
+                    return `
+                    <div class="tx-item ${itemClass}">
+                        <div style="flex:1;">
+                            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:4px;">
+                                <span class="${badgeClass}">${badgeTitle}</span>
+                                ${!r.isAdjustmentRecord ? `<span class="badge-weight">⚖️ ${weightBadgeLabel}</span>` : ''}
+                                ${!r.isAdjustmentRecord ? `<span style="font-size:13px; font-weight:800; color:#0f172a;">📦 ${formatNum(r.cartons)} کارتن</span>` : '<span style="font-size:12px; font-weight:800; color:#854d0e;">تغییر دفتری مانده</span>'}
+                            </div>
+                            <div class="tx-meta">📅 تاریخ: ${r.date} | شناسه: #${r.id.toString().slice(-6)}</div>
+                            <div class="tx-price">مبلغ سند: ${formatNum(r.total)} تومان</div>
+                            <div class="tx-price" style="font-size:12.5px; color:${r.remaining === 0 ? '#15803d':'#b91c1c'}">
+                                پرداختی: ${formatNum(r.paid)} تومان | مانده این سند: ${formatNum(r.remaining)} تومان
+                            </div>
+                            ${showManagerPrices && r.buyPrice && !r.isAdjustmentRecord ? `
+                                <div style="font-size:11px; color:#854d0e; background:#fef9c3; padding:2px 8px; border-radius:6px; margin-top:4px; display:inline-block;">
+                                    🔒 خرید: ${formatNum(r.buyPrice)} ت | سود این فاکتور: <strong>${formatNum(margin)} تومان</strong>
+                                </div>
+                            ` : ''}
+                            ${r.note ? `<div style="font-size:11.5px;color:#475569;margin-top:4px;background:rgba(255,255,255,0.7);padding:3px 6px;border-radius:6px;display:inline-block;">📝 ${r.note}</div>` : ''}
+                            ${r.signature ? `<div style="margin-top:6px;display:flex;align-items:center;gap:6px;"><span style="font-size:11px;color:#64748b;">امضا:</span><img src="${r.signature}" style="height:32px;background:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:2px;" alt="امضا"></div>` : ''}
+                        </div>
+                        <div class="tx-actions">
+                            <button class="btn btn-print" style="font-size:11.5px;padding:7px;" onclick="openInvoiceModal(${r.id})">
+                                🖨️ چاپ / PDF
+                            </button>
+                            <button class="btn btn-rubika" style="font-size:11px;padding:6px;" onclick="sendToRubika(${r.id})">
+                                📤 ارسال پیام
+                            </button>
+                            <button class="btn btn-outline" style="font-size:11px;padding:6px;background:${r.remaining === 0 ? '#cbd5e1':'#16a34a'};color:${r.remaining === 0 ? '#1e293b':'#fff'};border:none;" onclick="toggleStatus(${r.id})">
+                                ${r.remaining === 0 ? 'تبدیل به بدهی' : 'تسویه کامل'}
+                            </button>
+                            <button class="btn btn-outline" style="font-size:11px;padding:5px;background:#fee2e2;color:#b91c1c;border:none;" onclick="deleteRecord(${r.id})">
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                `}).join('')}
+            </div>
+        `;
+        setTimeout(() => {
+            initCanvas();
+            checkLiveStockValidation();
+        }, 50);
+    }
+
+    // Initial boot
+    render();
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    }
+</script>
+</body></html>

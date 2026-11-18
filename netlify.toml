@@ -1,0 +1,7 @@
+# Paths are relative to the repository root. No server functions or cloud database.
+[build]
+  command = "npm run build"
+  publish = "dist"
+[build.environment]
+  NODE_VERSION = "22"
+# Vite copies public/_redirects and public/_headers into the publish directory.
